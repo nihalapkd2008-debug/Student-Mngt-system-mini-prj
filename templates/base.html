@@ -59,15 +59,53 @@
             </a>
 
             <div class="flex items-center space-x-4 sm:space-x-8">
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-blue-700 bg-blue-50">Dashboard</a>
-                    <a href="{% url 'student_list' %}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-600 hover:bg-slate-100">Students</a>
-                </div>
-                
-                <!-- Single "Add Student" Button -->
-                <a href="{% url 'add_student' %}" class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 shadow-md transition-all duration-300 hover:scale-105">
-                    <i data-lucide="plus" class="w-4 h-4 mr-1"></i> Add Student
-                </a>
+
+    <div class="hidden md:flex items-center space-x-4">
+
+        <a href="{% url 'dashboard' %}"
+           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-blue-700 bg-blue-50">
+            Dashboard
+        </a>
+
+        <a href="{% url 'student_list' %}"
+           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-600 hover:bg-slate-100">
+            Students
+        </a>
+
+    </div>
+
+
+    <!-- Add Student -->
+
+    <a href="{% url 'add_student' %}"
+       class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 shadow-md transition-all duration-300 hover:scale-105">
+
+        <i data-lucide="plus" class="w-4 h-4 mr-1"></i>
+
+        Add Student
+
+    </a>
+
+
+    <!-- Logout -->
+
+    <form method="POST" action="{% url 'logout' %}" class="inline">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white transition-all duration-300">
+
+            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
+
+            Logout
+
+        </button>
+
+    </form>
+
+</div>
             </div>
         </div>
     </nav>
