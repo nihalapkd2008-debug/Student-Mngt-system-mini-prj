@@ -12,5 +12,4 @@ urlpatterns = [
     path('students/female/', views.female_students, name='female_students'),
     path('students/recent/', views.recent_students, name='recent_students'),
     path('students/top-class/', views.top_class_list, name='top_class_list'),
-        # <-- ADD THIS LINE
 ]

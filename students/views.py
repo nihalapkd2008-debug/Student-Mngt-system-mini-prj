@@ -2,9 +2,32 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Q, Count
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from .models import Student
 from datetime import datetime, timedelta
 import json
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+
+        else:
+            messages.error(request, 'Invalid username or password.')
+
+    return render(request, 'login.html')
+
 def dashboard(request):
     total_students = Student.objects.count()
     
