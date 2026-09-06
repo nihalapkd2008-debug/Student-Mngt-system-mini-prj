@@ -11,6 +11,11 @@ urlpatterns = [
     # Students
     path('students/', views.student_list, name='student_list'),
     path('api/students/', views.student_api, name='student_api'),
+    path(
+    'api/students/<int:student_id>/',
+    views.student_detail_api,
+    name='student_detail_api'
+),
     path('add/', views.add_student, name='add_student'),
     path('update/<int:student_id>/', views.update_student, name='update_student'),
     path('delete/<int:student_id>/', views.delete_student, name='delete_student'),
