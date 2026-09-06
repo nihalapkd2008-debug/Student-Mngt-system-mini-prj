@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 import json
 from django.utils import timezone
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 # =========================================================
 # LOGIN
@@ -468,3 +470,11 @@ def mark_attendance(request):
         'today': today,
     }
     return render(request, 'mark_attendance.html', context)
+
+
+@api_view(['GET'])
+def student_api(request):
+    return Response({
+        "message": "Student Management API",
+        "status": "success"
+    })
