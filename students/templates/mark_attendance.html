@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="animate-fade-up">
+
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900">✅ Mark Attendance</h2>
+            <p class="text-slate-500">Mark attendance for all students - {{ today|date:"d M Y" }}</p>
+        </div>
+        <a href="{% url 'attendance_list' %}" class="text-sm text-blue-600 hover:text-blue-800">← Back to List</a>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for data in attendance_data %}
+            <div class="premium-card p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">{{ data.student.name|first|upper }}</div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-900">{{ data.student.name }}</p>
+                            <p class="text-xs text-slate-500">{{ data.student.class_name }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="student_id" value="{{ data.student.id }}">
+                <input type="hidden" name="date" value="{{ today|date:'Y-m-d' }}">
+
+                <div class="flex gap-2">
+                    <label class="flex-1">
+                        <input type="radio" name="status_{{ data.student.id }}" value="Present" {% if data.attendance and data.attendance.status == 'Present' %}checked{% endif %}>
+                        <span class="block text-center text-sm py-2 rounded-lg border-2 border-transparent hover:border-green-300 transition {% if data.attendance and data.attendance.status == 'Present' %}bg-green-100 border-green-500{% else %}bg-slate-50{% endif %}">✅ Present</span>
+                    </label>
+                    <label class="flex-1">
+                        <input type="radio" name="status_{{ data.student.id }}" value="Absent" {% if data.attendance and data.attendance.status == 'Absent' %}checked{% endif %}>
+                        <span class="block text-center text-sm py-2 rounded-lg border-2 border-transparent hover:border-red-300 transition {% if data.attendance and data.attendance.status == 'Absent' %}bg-red-100 border-red-500{% else %}bg-slate-50{% endif %}">❌ Absent</span>
+                    </label>
+                    <label class="flex-1">
+                        <input type="radio" name="status_{{ data.student.id }}" value="Leave" {% if data.attendance and data.attendance.status == 'Leave' %}checked{% endif %}>
+                        <span class="block text-center text-sm py-2 rounded-lg border-2 border-transparent hover:border-amber-300 transition {% if data.attendance and data.attendance.status == 'Leave' %}bg-amber-100 border-amber-500{% else %}bg-slate-50{% endif %}">📝 Leave</span>
+                    </label>
+                </div>
+                {% if data.attendance %}
+                <p class="text-xs text-slate-400 mt-2 text-center">Previously: {{ data.attendance.status }}</p>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12"><p class="text-slate-500">No students found. <a href="{% url 'add_student' %}" class="text-blue-600 hover:underline">Add a student</a></p></div>
+            {% endfor %}
+        </div>
+
+        {% if attendance_data %}
+        <div class="mt-6 flex justify-center">
+            <button type="submit" class="px-8 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-800 transition-all duration-300 hover:scale-105 shadow-md">💾 Save All Attendance</button>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+<style>
+    input[type="radio"] { display: none; }
+    input[type="radio"]:checked + span { border-color: #2563eb !important; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); }
+</style>
+{% endblock %}

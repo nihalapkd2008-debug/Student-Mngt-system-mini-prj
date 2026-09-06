@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="animate-fade-up">
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900">📅 Attendance Tracker</h2>
+            <p class="text-slate-500">View and manage student attendance records</p>
+        </div>
+        <a href="{% url 'mark_attendance' %}" class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 shadow-md transition-all duration-300 hover:scale-105">
+            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Mark Attendance
+        </a>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="premium-card p-4 text-center"><div class="text-2xl font-bold text-emerald-600">{{ present_today }}</div><div class="text-xs text-slate-500">✅ Present Today</div></div>
+        <div class="premium-card p-4 text-center"><div class="text-2xl font-bold text-red-600">{{ absent_today }}</div><div class="text-xs text-slate-500">❌ Absent Today</div></div>
+        <div class="premium-card p-4 text-center"><div class="text-2xl font-bold text-amber-600">{{ leave_today }}</div><div class="text-xs text-slate-500">📝 Leave Today</div></div>
+    </div>
+
+    <div class="premium-card p-4 mb-6">
+        <form method="GET" class="flex flex-wrap gap-3 items-end">
+            <div>
+                <label class="text-xs font-medium text-slate-500">Date</label>
+                <input type="date" name="date" value="{{ date_filter }}" class="block w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="text-xs font-medium text-slate-500">Status</label>
+                <select name="status" class="block w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="">All</option>
+                    <option value="Present" {% if status_filter == 'Present' %}selected{% endif %}>Present</option>
+                    <option value="Absent" {% if status_filter == 'Absent' %}selected{% endif %}>Absent</option>
+                    <option value="Leave" {% if status_filter == 'Leave' %}selected{% endif %}>Leave</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs font-medium text-slate-500">Student</label>
+                <input type="text" name="student" placeholder="Search student..." value="{{ request.GET.student }}" class="block w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button type="submit" class="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm hover:bg-blue-800 transition">Filter</button>
+            <a href="{% url 'attendance_list' %}" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm hover:bg-slate-300 transition">Reset</a>
+        </form>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-600">Student</th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-600">Date</th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-600">Status</th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-600">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for att in attendances %}
+                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                        <td class="px-4 py-3">
+    <a href="{% url 'student_profile' att.student.id %}" class="text-slate-900 hover:text-blue-600 hover:underline font-medium">
+        {{ att.student.name }}
+    </a>
+</td>
+                        <td class="px-4 py-3 text-slate-600">{{ att.date|date:"d M Y" }}</td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold {% if att.status == 'Present' %}bg-green-100 text-green-700{% elif att.status == 'Absent' %}bg-red-100 text-red-700{% else %}bg-amber-100 text-amber-700{% endif %}">
+                                {{ att.status }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-slate-600">{{ att.remarks|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="px-4 py-8 text-center text-slate-500">No attendance records found</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

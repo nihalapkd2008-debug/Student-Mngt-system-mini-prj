@@ -1,0 +1,310 @@
+/* 1. Global Typography & Background */
+body {
+    /* Premium animated gradient background */
+    background: linear-gradient(135deg, #eff6ff 0%, #f0f4ff 30%, #fff7ed 70%, #fef3c7 100%);
+    background-size: 400% 400%;
+    animation: gradientMove 20s ease-in-out infinite alternate;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Animated Background Gradient */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 2. Glassmorphism Navbar & Cards (Apple-inspired) */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.premium-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(0, 20, 80, 0.15);
+    border-color: rgba(37, 99, 235, 0.15);
+}
+
+/* 3. Professional Blue & Orange Theme Hovers */
+.brand-gradient {
+    background: linear-gradient(135deg, #2563eb 0%, #e95d0e 100%);
+}
+
+.brand-text {
+    background: linear-gradient(135deg, #2563eb 0%, #e95d0e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 4. Table & List Hover States */
+.table-row-hover:hover {
+    background: linear-gradient(to right, #eff6ff, #fff7ed) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 5. Beautiful Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* 6. Animated Shimmer Effect for Loading */
+.shimmer {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* 7. Chart.js Overrides */
+canvas {
+    border-radius: 12px;
+}
+
+/* 8. Empty State Icons */
+.empty-state-icon {
+    opacity: 0.5;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.02));
+}
+
+/* 9. Smooth Transitions for all interactive elements */
+button, a, input, select, textarea {
+    transition: all 0.2s ease-in-out;
+}
+
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* 10. Lucide Icons Base Style */
+.lucide {
+    stroke-width: 2.5;
+}
+
+/* ============================================
+   🎨 ADDITIONAL ANIMATIONS & EFFECTS
+   ============================================ */
+
+/* 11. Floating Particles - Add to body overlay */
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-particle linear infinite;
+}
+
+.particle:nth-child(1) { width: 20px; height: 20px; background: rgba(37, 99, 235, 0.15); left: 5%; animation-duration: 18s; animation-delay: 0s; }
+.particle:nth-child(2) { width: 35px; height: 35px; background: rgba(233, 93, 14, 0.12); left: 15%; animation-duration: 22s; animation-delay: 2s; }
+.particle:nth-child(3) { width: 15px; height: 15px; background: rgba(37, 99, 235, 0.2); left: 25%; animation-duration: 15s; animation-delay: 4s; }
+.particle:nth-child(4) { width: 45px; height: 45px; background: rgba(233, 93, 14, 0.08); left: 35%; animation-duration: 25s; animation-delay: 1s; }
+.particle:nth-child(5) { width: 25px; height: 25px; background: rgba(37, 99, 235, 0.18); left: 45%; animation-duration: 20s; animation-delay: 3s; }
+.particle:nth-child(6) { width: 30px; height: 30px; background: rgba(233, 93, 14, 0.1); left: 55%; animation-duration: 17s; animation-delay: 5s; }
+.particle:nth-child(7) { width: 18px; height: 18px; background: rgba(37, 99, 235, 0.22); left: 65%; animation-duration: 23s; animation-delay: 2.5s; }
+.particle:nth-child(8) { width: 40px; height: 40px; background: rgba(233, 93, 14, 0.07); left: 75%; animation-duration: 19s; animation-delay: 0.5s; }
+.particle:nth-child(9) { width: 22px; height: 22px; background: rgba(37, 99, 235, 0.16); left: 85%; animation-duration: 21s; animation-delay: 3.5s; }
+.particle:nth-child(10) { width: 50px; height: 50px; background: rgba(233, 93, 14, 0.06); left: 92%; animation-duration: 26s; animation-delay: 1.5s; }
+.particle:nth-child(11) { width: 28px; height: 28px; background: rgba(37, 99, 235, 0.14); left: 10%; animation-duration: 24s; animation-delay: 4.5s; }
+.particle:nth-child(12) { width: 38px; height: 38px; background: rgba(233, 93, 14, 0.09); left: 50%; animation-duration: 16s; animation-delay: 2.2s; }
+
+@keyframes float-particle {
+    0% { transform: translateY(100vh) rotate(0deg) scale(0); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) rotate(720deg) scale(1); opacity: 0; }
+}
+
+/* 12. Geometric Shapes Animation */
+.shape {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06;
+    animation: float-shape ease-in-out infinite alternate;
+}
+
+.shape-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    top: 8%;
+    left: 3%;
+    animation-duration: 20s;
+}
+
+.shape-square {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #e95d0e, #f97316);
+    border-radius: 20px;
+    bottom: 12%;
+    right: 5%;
+    animation-duration: 18s;
+    transform: rotate(45deg);
+}
+
+.shape-triangle {
+    width: 0;
+    height: 0;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-bottom: 120px solid rgba(37, 99, 235, 0.3);
+    top: 55%;
+    right: 2%;
+    animation-duration: 22s;
+}
+
+.shape-diamond {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e95d0e, #fbbf24);
+    transform: rotate(45deg);
+    border-radius: 12px;
+    top: 75%;
+    left: 2%;
+    animation-duration: 25s;
+}
+
+.shape-hexagon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #2563eb, #8b5cf6);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    top: 30%;
+    left: 88%;
+    animation-duration: 28s;
+}
+
+@keyframes float-shape {
+    0% { transform: translateY(0px) rotate(0deg) scale(1); }
+    100% { transform: translateY(-40px) rotate(12deg) scale(1.08); }
+}
+
+/* 13. Navbar Glass Effect - Override */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 14. Card Glass Enhancement */
+.premium-card {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.premium-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 40px -12px rgba(0, 20, 80, 0.15) !important;
+    border-color: rgba(37, 99, 235, 0.15) !important;
+}
+/* ===== EXTRA STYLES FOR NEW PAGES ===== */
+
+/* Premium Card - already exists, but ensure these */
+.premium-card {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.premium-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 40px -12px rgba(0, 20, 80, 0.15) !important;
+    border-color: rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Form inputs styling */
+input, select, textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s;
+    background: white;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Table row hover */
+.table-row-hover:hover {
+    background: linear-gradient(to right, #eff6ff, #fff7ed) !important;
+}
+
+/* Scrollbar for tables */
+.max-h-80::-webkit-scrollbar,
+.max-h-64::-webkit-scrollbar {
+    width: 4px;
+}
+.max-h-80::-webkit-scrollbar-thumb,
+.max-h-64::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Mobile menu animation */
+#mobileMenu {
+    transition: all 0.3s ease;
+}
+
+/* Animation for fade up */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}

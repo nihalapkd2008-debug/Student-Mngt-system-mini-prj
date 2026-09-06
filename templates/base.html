@@ -60,19 +60,12 @@
 
             <div class="flex items-center space-x-4 sm:space-x-8">
 
-    <div class="hidden md:flex items-center space-x-4">
-
-        <a href="{% url 'dashboard' %}"
-           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-blue-700 bg-blue-50">
-            Dashboard
-        </a>
-
-        <a href="{% url 'student_list' %}"
-           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-600 hover:bg-slate-100">
-            Students
-        </a>
-
-    </div>
+   <div class="hidden md:flex items-center space-x-1">
+    <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if request.path == '/dashboard/' %}text-blue-700 bg-blue-50{% else %}text-slate-600 hover:bg-slate-100{% endif %}">📊 Dashboard</a>
+    <a href="{% url 'student_list' %}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if 'students' in request.path %}text-blue-700 bg-blue-50{% else %}text-slate-600 hover:bg-slate-100{% endif %}">👨‍🎓 Students</a>
+    <a href="{% url 'fee_list' %}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if 'fees' in request.path %}text-blue-700 bg-blue-50{% else %}text-slate-600 hover:bg-slate-100{% endif %}">💰 Fees</a>
+    <a href="{% url 'attendance_list' %}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if 'attendance' in request.path %}text-blue-700 bg-blue-50{% else %}text-slate-600 hover:bg-slate-100{% endif %}">📅 Attendance</a>
+</div>
 
 
     <!-- Add Student -->

@@ -2,6 +2,7 @@
 {% block content %}
 
 <div class="space-y-8">
+    <!-- Hero Banner -->
     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-8 sm:p-12 shadow-xl animate-fade-up">
         <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-2xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
@@ -29,7 +30,7 @@
             </div>
         </a>
 
-        <!-- 2. Latest Students (New Label, shows the count of latest 10) -->
+        <!-- 2. Latest Students -->
         <a href="{% url 'recent_students' %}" class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group cursor-pointer block">
             <div class="flex justify-between items-start">
                 <div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Latest Students</p><p class="text-3xl font-extrabold text-slate-900 mt-2">{{ recent_students_count }}</p></div>
@@ -72,55 +73,118 @@
 
     <!-- CHART AND RECENT STUDENTS SIDEBAR -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-up-delay-2">
+        <!-- Chart -->
         <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-md border border-slate-100 relative">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-5 h-5 text-blue-600"></i> Admissions Overview</h2>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i> 
+                    Admissions Overview
+                </h2>
+                <span class="text-xs text-slate-400">
+                    {% if total_students > 0 %}
+                        {{ total_students }} total students
+                    {% else %}
+                        No data yet
+                    {% endif %}
+                </span>
             </div>
-            <div class="h-64 w-full"><canvas id="realActivityChart"></canvas></div>
+            <div class="relative">
+                <div class="h-64 w-full"><canvas id="admissionsChart"></canvas></div>
+                
+                <!-- Empty State Overlay (if no students) -->
+                {% if total_students == 0 %}
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-lg">
+                    <i data-lucide="users" class="w-12 h-12 text-slate-300 mb-2"></i>
+                    <p class="text-sm font-medium text-slate-500">No admissions yet</p>
+                    <p class="text-xs text-slate-400">Start by adding your first student</p>
+                    <a href="{% url 'add_student' %}" class="mt-3 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition shadow-md">
+                        + Add Student
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
+
+        <!-- Recent Students -->
         <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100">
-            <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="activity" class="w-5 h-5 text-blue-600"></i> Recent Students</h2>
+            <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <i data-lucide="activity" class="w-5 h-5 text-blue-600"></i> 
+                Recent Students
+            </h2>
             <div class="space-y-4 max-h-[280px] overflow-y-auto pr-2 scrollbar-hide">
                 {% for student in recent_students %}
                 <div class="flex gap-3 border-b border-slate-100 pb-3 last:border-0">
-                    <div class="flex-shrink-0 mt-1"><div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">{{ student.name|slice:":1" }}</div></div>
-                    <div class="flex-1"><p class="text-sm font-medium text-slate-800">{{ student.name }} <span class="font-normal text-slate-500">joined</span></p><p class="text-xs text-slate-400 mt-1">Class {{ student.class_name }}</p></div>
+                    <div class="flex-shrink-0 mt-1">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">{{ student.name|slice:":1" }}</div>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-slate-800">{{ student.name }} <span class="font-normal text-slate-500">joined</span></p>
+                        <p class="text-xs text-slate-400 mt-1">Class {{ student.class_name }}</p>
+                    </div>
                 </div>
-                {% empty %}<div class="text-center py-8 text-slate-500"><p class="text-sm">No recent students.</p></div>{% endfor %}
+                {% empty %}
+                <div class="text-center py-8 text-slate-500">
+                    <p class="text-sm">No recent students.</p>
+                    <a href="{% url 'add_student' %}" class="text-xs text-blue-600 hover:underline">Add your first student</a>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 
-    <!-- RECENT ADMISSIONS TABLE WITH BEAUTIFUL POPUP MODAL -->
+    <!-- RECENT ADMISSIONS TABLE -->
     <div class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden animate-fade-up-delay-3">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-blue-600"></i> Recent Admissions</h2>
-            <a href="{% url 'student_list' %}" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">View All <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i data-lucide="clock" class="w-5 h-5 text-blue-600"></i> 
+                Recent Admissions
+            </h2>
+            <a href="{% url 'student_list' %}" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                View All <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
                 <thead class="bg-slate-50 text-slate-500 font-semibold text-xs uppercase tracking-wider">
-                    <tr><th class="px-6 py-4">Student</th><th class="px-6 py-4">Class</th><th class="px-6 py-4">Date</th><th class="px-6 py-4 text-right">Actions</th></tr>
+                    <tr>
+                        <th class="px-6 py-4">Student</th>
+                        <th class="px-6 py-4">Class</th>
+                        <th class="px-6 py-4">Date</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     {% for student in recent_students %}
                     <tr class="hover:bg-blue-50/50 transition-colors">
-                        <td class="px-6 py-4 font-medium text-slate-900 flex items-center gap-3"><div class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">{{ student.name|slice:":1" }}</div>{{ student.name }}</td>
+                        <td class="px-6 py-4 font-medium text-slate-900 flex items-center gap-3">
+                            <div class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">{{ student.name|slice:":1" }}</div>
+                            {{ student.name }}
+                        </td>
                         <td class="px-6 py-4 text-slate-600">{{ student.class_name }}</td>
                         <td class="px-6 py-4 text-slate-500">{{ student.admission_date|date:"M d, Y" }}</td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{% url 'update_student' student.id %}" class="inline-flex items-center p-1.5 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 shadow-sm" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></a>
-                            <button onclick="openDeleteModal({{ student.id }}, '{{ student.name }}')" class="inline-flex items-center p-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 shadow-sm" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <a href="{% url 'update_student' student.id %}" class="inline-flex items-center p-1.5 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 shadow-sm" title="Edit">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </a>
+                            <button onclick="openDeleteModal({{ student.id }}, '{{ student.name }}')" class="inline-flex items-center p-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 shadow-sm" title="Delete">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
                         </td>
                     </tr>
-                    {% empty %}<tr><td colspan="4" class="px-6 py-12 text-center text-slate-500"><p class="font-semibold">No recent admissions</p></td></tr>{% endfor %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-12 text-center text-slate-500">
+                            <p class="font-semibold">No recent admissions</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- BEAUTIFUL CUSTOM DELETE CONFIRMATION MODAL -->
+<!-- DELETE CONFIRMATION MODAL -->
 <div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden z-50 flex items-center justify-center">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 transform transition-all scale-100 animate-fade-up border border-slate-100">
         <div class="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-4">
@@ -141,15 +205,89 @@
 <!-- CHART.JS LOGIC -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('realActivityChart').getContext('2d');
+        const ctx = document.getElementById('admissionsChart').getContext('2d');
+        
+        // Get data from Django
         const labels = JSON.parse('{{ chart_labels|safe }}');
         const data = JSON.parse('{{ chart_data|safe }}');
+        
+        // Check if any data exists
+        const hasData = data.some(val => val > 0);
+        
+        // If no data, use sample data for demo
+        let chartData = data;
+        let chartLabels = labels;
+        
+        if (!hasData) {
+            // Sample data for demo (last 6 months)
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            chartLabels = months;
+            chartData = [2, 3, 1, 4, 2, 3];
+        }
+        
         new Chart(ctx, {
-            type: 'bar', data: { labels: labels, datasets: [{ label: 'Admissions', data: data, backgroundColor: 'rgba(59, 130, 246, 0.7)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 1, borderRadius: 6, borderSkipped: false }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } } }
+            type: 'bar',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Admissions',
+                    data: chartData,
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        cornerRadius: 8,
+                        padding: 10,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' students';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: { size: 10 }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                }
+            }
         });
     });
 
+    // Delete Modal Functions
     function openDeleteModal(id, name) {
         document.getElementById('modalStudentName').innerText = `Are you sure you want to delete "${name}"? This action cannot be undone.`;
         document.getElementById('deleteForm').action = `/delete/${id}/`;
@@ -159,5 +297,19 @@
     function closeDeleteModal() {
         document.getElementById('deleteModal').classList.add('hidden');
     }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+
+    // Close modal on click outside
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
 </script>
 {% endblock %}
